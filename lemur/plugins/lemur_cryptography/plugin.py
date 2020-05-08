@@ -41,9 +41,10 @@ def issue_certificate(csr, options, private_key=None):
     if options.get("authority"):
         # Issue certificate signed by an existing lemur_certificates authority
         issuer_subject = options["authority"].authority_certificate.subject
-        assert (
-            private_key is None
-        ), "Private would be ignored, authority key used instead"
+        if not "parent" in options:
+            assert (
+                private_key is None
+            ), "Private would be ignored, authority key used instead"
         private_key = options["authority"].authority_certificate.private_key
         chain_cert_pem = options["authority"].authority_certificate.body
         authority_key_identifier_public = options[
